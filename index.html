@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inox Center Kviz</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="favicon.png" type="image/png" />
+</head>
+<body>
+  <div class="container">
+    <img src="logo.png" alt="Inox Center logotip" class="logo" />
+    <h1>Inox Center Kviz</h1>
+    <div class="game-layout">
+      <div class="quiz-main">
+        <div id="quiz-container">
+          <div id="question">Vprašanje se nalaga...</div>
+          <div id="answers">
+            <button class="answer-btn" id="A"></button>
+            <button class="answer-btn" id="B"></button>
+            <button class="answer-btn" id="C"></button>
+            <button class="answer-btn" id="D"></button>
+          </div>
+          <div class="lifelines">
+            <button id="fiftyFifty">50:50</button>
+            <button id="callEngineer">Pokliči inženirja</button>
+            <button id="askAudience">Glas sodelavcev</button>
+          </div>
+          <div id="hint"></div>
+          <button id="next" class="hidden">Naprej</button>
+        </div>
+        <div id="result" class="hidden">
+          <h2>Čestitke! Postal si INOX CENTER mojster!</h2>
+          <button onclick="location.reload()">Začni znova</button>
+        </div>
+      </div>
+      <div class="question-ladder" id="question-ladder"></div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
