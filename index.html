@@ -1,15 +1,57 @@
 <!DOCTYPE html>
 <html lang="sl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Inox Center Kviz</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="favicon.png" type="image/png">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <style>
+    #start-screen, #leaderboard {
+      text-align: center;
+      margin-top: 50px;
+    }
+    #start-screen input {
+      padding: 10px;
+      font-size: 1rem;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      border: none;
+    }
+    #start-screen button {
+      padding: 10px 20px;
+      font-weight: bold;
+      border-radius: 6px;
+      border: none;
+      background-color: #00d1ff;
+      cursor: pointer;
+    }
+    #leaderboard {
+      margin-top: 40px;
+    }
+    #leaderboard h3 {
+      margin-bottom: 10px;
+    }
+    #leaderboard ul {
+      list-style: none;
+      padding: 0;
+    }
+    #leaderboard li {
+      margin: 4px 0;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <img src="logo.svg" alt="Inox Center logotip" class="logo">
+  <div id="start-screen">
+    <img src="logo_contrast.png" alt="Inox Center logotip" class="logo" />
+    <h1>Inox Center Kviz</h1>
+    <p>Vpiši svoje ime in začni kviz:</p>
+    <input type="text" id="player-name" placeholder="Tvoje ime" />
+    <br />
+    <button onclick="startGame()">Začni kviz</button>
+  </div>
+
+  <div class="container" style="display:none;">
     <h1>Inox Center Kviz</h1>
     <div class="game-layout">
       <div class="quiz-main">
@@ -30,13 +72,19 @@
           <button id="next" class="hidden">Naprej</button>
         </div>
         <div id="result" class="hidden">
-          <h2>Čestitke! Postal si INOX CENTER mojster!</h2>
+          <h2 id="final-message"></h2>
+          <p id="final-score"></p>
           <button onclick="location.reload()">Začni znova</button>
+        </div>
+        <div id="leaderboard" class="hidden">
+          <h3>Lestvica najboljših</h3>
+          <ul id="score-list"></ul>
         </div>
       </div>
       <div class="question-ladder" id="question-ladder"></div>
     </div>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>

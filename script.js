@@ -13,9 +13,9 @@ document.addEventListener("DOMContentLoaded", function () {
   ];
 
   let currentQuestion = 0;
-  let usedFiftyFifty = false;
-  let usedEngineer = false;
-  let usedAudience = false;
+  let correctAnswers = 0;
+  let incorrectAnswers = 0;
+  let playerName = "";
 
   const questionEl = document.getElementById("question");
   const answerBtns = {
@@ -27,7 +27,23 @@ document.addEventListener("DOMContentLoaded", function () {
   const hintEl = document.getElementById("hint");
   const nextBtn = document.getElementById("next");
   const resultEl = document.getElementById("result");
+  const finalMessage = document.getElementById("final-message");
+  const finalScore = document.getElementById("final-score");
   const ladderEl = document.getElementById("question-ladder");
+  const leaderboardEl = document.getElementById("leaderboard");
+  const scoreList = document.getElementById("score-list");
+
+  window.startGame = function () {
+    const nameInput = document.getElementById("player-name");
+    if (!nameInput.value.trim()) {
+      alert("Prosim vnesi ime!");
+      return;
+    }
+    playerName = nameInput.value.trim();
+    document.getElementById("start-screen").style.display = "none";
+    document.querySelector(".container").style.display = "block";
+    loadQuestion();
+  };
 
   function renderLadder() {
     ladderEl.innerHTML = "";
@@ -67,8 +83,11 @@ document.addEventListener("DOMContentLoaded", function () {
       answerBtns[k].disabled = true;
       if (k === correctKey) answerBtns[k].classList.add("correct");
     });
-    if (key !== correctKey) {
+    if (key === correctKey) {
+      correctAnswers++;
+    } else {
       answerBtns[key].classList.add("incorrect");
+      incorrectAnswers++;
     }
     nextBtn.classList.remove("hidden");
   }
@@ -86,36 +105,48 @@ document.addEventListener("DOMContentLoaded", function () {
       loadQuestion();
     } else {
       document.getElementById("quiz-container").classList.add("hidden");
-      resultEl.classList.remove("hidden");
+      showResult();
     }
   });
 
-  document.getElementById("fiftyFifty").addEventListener("click", () => {
-    if (usedFiftyFifty) return;
-    usedFiftyFifty = true;
-    const correct = questions[currentQuestion].correct;
-    const wrong = Object.keys(answerBtns).filter(k => k !== correct);
-    const toHide = wrong.sort(() => 0.5 - Math.random()).slice(0, 2);
-    toHide.forEach(k => answerBtns[k].style.display = "none");
-  });
+  function showResult() {
+    resultEl.classList.remove("hidden");
 
-  document.getElementById("callEngineer").addEventListener("click", () => {
-    if (usedEngineer) return;
-    usedEngineer = true;
-    const correct = questions[currentQuestion].correct;
-    const suggestion = Math.random() < 0.8 ? correct : Object.keys(answerBtns).find(k => k !== correct);
-    hintEl.textContent = `Inženir predlaga odgovor: ${suggestion}`;
-  });
+    let message = "";
+    if (correctAnswers === questions.length) {
+      message = "Bravo! Si pravi INOX mojster!";
+    } else if (correctAnswers === 0) {
+      message = "Žal si še INOX amater. Poizkusi znova!";
+    } else if (correctAnswers >= questions.length * 0.7) {
+      message = "Odlično! Zelo si blizu mojstru!";
+    } else if (correctAnswers >= questions.length * 0.4) {
+      message = "Solidno! Še malo in boš mojster.";
+    } else {
+      message = "Zaenkrat še amater. Vadi naprej!";
+    }
 
-  document.getElementById("askAudience").addEventListener("click", () => {
-    if (usedAudience) return;
-    usedAudience = true;
-    const correct = questions[currentQuestion].correct;
-    let distribution = { A: 20, B: 20, C: 20, D: 20 };
-    distribution[correct] = 60;
-    hintEl.textContent = `Glasovi sodelavcev: ` +
-      Object.entries(distribution).map(([k, v]) => `${k}: ${v}%`).join(", ");
-  });
+    finalMessage.textContent = message;
+    finalScore.textContent = `${playerName}, pravilno si odgovoril na ${correctAnswers} od ${questions.length} vprašanj.`;
 
-  loadQuestion();
+    saveScore();
+    renderLeaderboard();
+  }
+
+  function saveScore() {
+    const existing = JSON.parse(localStorage.getItem("inoxScores") || "[]");
+    existing.push({ name: playerName, score: correctAnswers });
+    localStorage.setItem("inoxScores", JSON.stringify(existing));
+  }
+
+  function renderLeaderboard() {
+    leaderboardEl.classList.remove("hidden");
+    const data = JSON.parse(localStorage.getItem("inoxScores") || "[]");
+    const sorted = data.sort((a, b) => b.score - a.score).slice(0, 10);
+    scoreList.innerHTML = "";
+    sorted.forEach(entry => {
+      const li = document.createElement("li");
+      li.textContent = `${entry.name}: ${entry.score} točk`;
+      scoreList.appendChild(li);
+    });
+  }
 });
