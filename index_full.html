@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inox Center Kviz</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <style>
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #1A275C;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      font-size: 1.5rem;
+      flex-direction: column;
+    }
+    .loader {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #00d1ff;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin-top: 20px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div id="loading-screen">
+    Nalaganje kviza...
+    <div class="loader"></div>
+  </div>
+
+  <div class="container" style="display:none;">
+    <img src="logo_contrast.png" alt="Inox Center logotip" class="logo" />
+    <h1>Inox Center Kviz</h1>
+    <div class="game-layout">
+      <div class="quiz-main">
+        <div id="quiz-container">
+          <div id="question">Vprašanje se nalaga...</div>
+          <div id="answers">
+            <button class="answer-btn" id="A"></button>
+            <button class="answer-btn" id="B"></button>
+            <button class="answer-btn" id="C"></button>
+            <button class="answer-btn" id="D"></button>
+          </div>
+          <div class="lifelines">
+            <button id="fiftyFifty">50:50</button>
+            <button id="callEngineer">Pokliči inženirja</button>
+            <button id="askAudience">Glas sodelavcev</button>
+          </div>
+          <div id="hint"></div>
+          <button id="next" class="hidden">Naprej</button>
+        </div>
+        <div id="result" class="hidden">
+          <h2>Čestitke! Postal si INOX CENTER mojster!</h2>
+          <button onclick="location.reload()">Začni znova</button>
+        </div>
+      </div>
+      <div class="question-ladder" id="question-ladder"></div>
+    </div>
+  </div>
+
+  <script>
+    // Simuliraj nalaganje
+    window.addEventListener("load", function () {
+      setTimeout(() => {
+        document.getElementById("loading-screen").style.display = "none";
+        document.querySelector(".container").style.display = "block";
+      }, 1000);
+    });
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
